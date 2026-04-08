@@ -1,6 +1,18 @@
-const getAllProperties = async (AppDataSource) => {
+const getAllProperties = async (AppDataSource, page = 1, limit = 6) => {
     const propertyRepository = AppDataSource.getRepository("Property");
-    return await propertyRepository.find();
+    const [properties, totalCount] = await propertyRepository.findAndCount({
+        skip: (page - 1) * limit,
+        take: limit,
+        order: { created_at: "DESC" }
+    });
+    return { properties, totalCount };
 };
 
-module.exports = { getAllProperties };
+const getPropertyById = async (AppDataSource, id) => {
+    const propertyRepository = AppDataSource.getRepository("Property");
+    const property = await propertyRepository.findOneBy({ id });
+    if (!property) throw new Error("Property not found");
+    return property;
+};
+
+module.exports = { getAllProperties, getPropertyById };

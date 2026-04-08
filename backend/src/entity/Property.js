@@ -4,7 +4,7 @@ module.exports = new EntitySchema({
     name: "Property",
     tableName: "properties",
     columns: {
-        id: { primary: true, type: "uuid", generated: "uuid" },
+        id: { primary: true, type: "int", generated: "increment" },
         title: { type: "varchar", nullable: false },
         location: { type: "varchar", nullable: false },
         price: { type: "decimal", precision: 12, scale: 2, nullable: false },

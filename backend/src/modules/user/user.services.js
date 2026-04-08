@@ -9,6 +9,11 @@ const register = async (AppDataSource, email, password, name) => {
         throw { message: "User already exists", code: 400 };
     }
     
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+        throw { message: "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$!%*?&)", code: 400 };
+    }
+    
     const hashedPassword = await bcrypt.hash(password, 10);
     
     const user = userRepository.create({
