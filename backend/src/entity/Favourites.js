@@ -5,6 +5,8 @@ module.exports = new EntitySchema({
     tableName: "favourites",
     columns: {
         id: { primary: true, type: "uuid", generated: "uuid" },
+        userId: { type: "uuid", nullable: false },
+        propertyId: { type: "uuid", nullable: false },
         created_at: { type: "timestamp", createDate: true },
     },
     relations: {

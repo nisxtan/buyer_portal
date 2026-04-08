@@ -2,7 +2,7 @@ const { DataSource } = require("typeorm");
 const config = require("./config");
 const User = require("../entity/User");
 const Property = require("../entity/Property");
-const Favourite = require("../entity/Favourite");
+const Favourite = require("../entity/Favourites");
 
 const AppDataSource = new DataSource({
     type: "postgres",
