@@ -22,9 +22,18 @@ A real-estate buyer portal where users can browse property listings and manage t
 
 ### 1. Create the database and user
 
+You'll need PostgreSQL running locally. If you don't have a SQL client, you can use [pgAdmin](https://www.pgadmin.org/) or [DBeaver](https://dbeaver.io/) to run the following:
+
 ```sql
 CREATE USER buyer_portal WITH PASSWORD 'buyer_portal';
 CREATE DATABASE buyer_portal OWNER buyer_portal;
+```
+
+Or if you prefer the terminal:
+
+```bash
+psql -U postgres -c "CREATE USER buyer_portal WITH PASSWORD 'buyer_portal';"
+psql -U postgres -c "CREATE DATABASE buyer_portal OWNER buyer_portal;"
 ```
 
 ### 2. Add backend environment variables
