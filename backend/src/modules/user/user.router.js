@@ -18,7 +18,10 @@ userRouter.post(
     userController.login
 );
 
-// Profile route (protected)
+// Refresh token route
+userRouter.post("/refresh-token", userController.refreshToken);
+
+// Profile route
 userRouter.get("/profile", authMiddleware, userController.getProfile);
 
 module.exports = userRouter;

@@ -1,6 +1,6 @@
 require("dotenv").config({ path: require("path").resolve(__dirname, "../../.env") });
 const { DataSource } = require("typeorm");
-const config = require("../config/config");  // Changed from ./config/config to ../config/config
+const config = require("../config/config");
 const Property = require("../entity/Property");
 const User = require("../entity/User");
 const Favourite = require("../entity/Favourites");
@@ -20,7 +20,6 @@ const AppDataSource = new DataSource({
 const seedProperties = async () => {
     const propertyRepository = AppDataSource.getRepository("Property");
 
-    // Clear existing for a clean sweep of real images
     await AppDataSource.query('TRUNCATE TABLE "favourites" CASCADE');
     await AppDataSource.query('TRUNCATE TABLE "properties" CASCADE');
     console.log("Existing properties and favourites cleared via CASCADE.");

@@ -5,8 +5,8 @@ const getAllProperties = async (req, res, next) => {
         const AppDataSource = req.app.get("AppDataSource");
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 6;
-
-        const { properties, totalCount } = await propertyService.getAllProperties(AppDataSource, page, limit);
+        const search = req.query.search || "";
+        const { properties, totalCount } = await propertyService.getAllProperties(AppDataSource, page, limit, search);
 
         res.status(200).json({
             message: "Properties fetched successfully",

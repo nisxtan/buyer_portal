@@ -6,17 +6,14 @@ const { addFavouriteSchema } = require("./validator");
 
 favouriteRouter.use(authMiddleware);
 
-// Get all favourites
 favouriteRouter.get("/", favouriteController.getFavourites);
 
-// Add favourite
 favouriteRouter.post(
     "/",
     validateBody(addFavouriteSchema),
     favouriteController.addFavourite
 );
 
-// Remove favourite
 favouriteRouter.delete("/:propertyId", favouriteController.removeFavourite);
 
 module.exports = favouriteRouter;

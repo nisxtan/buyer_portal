@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const { generateToken } = require("../../utils/jwt");
+const { generateAccessToken, generateRefreshToken, verifyRefreshToken } = require("../../utils/jwt");
 
 const register = async (AppDataSource, email, password, name) => {
     const userRepository = AppDataSource.getRepository("User");
@@ -25,16 +25,19 @@ const register = async (AppDataSource, email, password, name) => {
     
     await userRepository.save(user);
     
-    const token = generateToken({
+    const accessToken = generateAccessToken({
         id: user.id,
         email: user.email,
         name: user.name,
         role: user.role
     });
     
+    const refreshToken = generateRefreshToken({ id: user.id });
+    
     return {
         message: "User registered successfully",
-        token,
+        accessToken,
+        refreshToken,
         user: {
             id: user.id,
             name: user.name,
@@ -57,16 +60,19 @@ const login = async (AppDataSource, email, password) => {
         throw { message: "Invalid credentials", code: 401 };
     }
     
-    const token = generateToken({
+    const accessToken = generateAccessToken({
         id: user.id,
         email: user.email,
         name: user.name,
         role: user.role
     });
     
+    const refreshToken = generateRefreshToken({ id: user.id });
+    
     return {
         message: "Login successful",
-        token,
+        accessToken,
+        refreshToken,
         user: {
             id: user.id,
             name: user.name,
@@ -91,4 +97,27 @@ const getProfile = async (AppDataSource, userId) => {
     return user;
 };
 
-module.exports = { register, login, getProfile };
+const refreshTokenService = async (AppDataSource, token) => {
+    try {
+        const decoded = verifyRefreshToken(token);
+        const userRepository = AppDataSource.getRepository("User");
+        
+        const user = await userRepository.findOne({ where: { id: decoded.id } });
+        if (!user) {
+            throw { message: "User not found", code: 404 };
+        }
+        
+        const accessToken = generateAccessToken({
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role
+        });
+        
+        return { accessToken };
+    } catch (err) {
+        throw { message: "Invalid or expired refresh token", code: 401 };
+    }
+};
+
+module.exports = { register, login, getProfile, refreshTokenService };
